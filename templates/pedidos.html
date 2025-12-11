@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="section-title">📚 Historial de pedidos</h2>
+
+{% if pedidos %}
+  <div class="card">
+    <table class="tabla-menu">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Mesa</th>
+          <th>Detalle</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for p in pedidos %}
+        <tr>
+          <td>{{ p.fecha_hora }}</td>
+          <td>{{ p.mesa }}</td>
+          <td>{{ p.detalle }}</td>
+          <td>S/ {{ p.total }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <a href="{{ url_for('vaciar_historial') }}" class="btn-secondary">🗑 Vaciar historial</a>
+
+{% else %}
+  <p>No hay pedidos registrados.</p>
+{% endif %}
+
+{% endblock %}

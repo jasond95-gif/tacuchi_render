@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>TACUCHI - Sistema de pedidos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+
+    <!-- CSS principal -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="icon" href="{{ url_for('static', filename='logo-192.png') }}">
+
+    <!-- ===============================
+         ESTILOS DE CORRECCIÓN (FORZADOS)
+       =============================== -->
+    <style>
+        /* ░░░ FIX 1: Texto blanco en pestañas superiores ░░░ */
+        .topbar-tabs a,
+        .topbar-tabs a:visited {
+            color: #ffffff !important;
+            text-decoration: none;
+        }
+
+        .tab-active {
+            background: rgba(255, 255, 255, 0.18);
+            padding: 6px 10px;
+            border-radius: 10px;
+        }
+
+        /* ░░░ FIX 2: Input cantidad + botón Agregar en una sola fila ░░░ */
+        .form-inline {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            gap: 8px !important;
+            width: 100%;
+        }
+
+        .qty-input {
+            width: 55px !important;
+            padding: 6px !important;
+            border: 1px solid #ccc !important;
+            border-radius: 8px !important;
+            text-align: center !important;
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="topbar-left">
+        <img src="{{ url_for('static', filename='logo.png') }}" class="logo" alt="TACUCHI">
+        <div class="topbar-title">
+            <div class="app-name">TACUCHI</div>
+            <div class="app-subtitle">Tomador de pedidos</div>
+        </div>
+    </div>
+
+    <nav class="topbar-tabs">
+        <a href="{{ url_for('index') }}"
+           class="{% if request.path == url_for('index') %}tab-active{% endif %}">
+            🧾 Nuevo pedido
+        </a>
+
+        <a href="{{ url_for('pedidos') }}"
+           class="{% if request.path == url_for('pedidos') %}tab-active{% endif %}">
+            📚 Historial
+        </a>
+    </nav>
+</header>
+
+
+<main class="main-content">
+    {% block content %}{% endblock %}
+</main>
+
+<!-- ===============================
+     SERVICE WORKER (Registro simple)
+   =============================== -->
+<script>
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js")
+            .catch(err => console.log("SW failed:", err));
+    }
+</script>
+
+</body>
+</html>

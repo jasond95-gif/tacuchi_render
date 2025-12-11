@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="layout">
+
+  <!-- MENÚ -->
+  <section class="menu">
+    <h2 class="section-title">Menú</h2>
+
+    {% for category, items in menu.items() %}
+      <h3 class="category-title">
+        {% if category == "PARRILLAS" %}🔥
+        {% elif category == "HAMBURGUESAS" %}🍔
+        {% elif category == "BEBIDAS" %}🥤
+        {% endif %}
+        {{ category }}
+      </h3>
+
+      <div class="card">
+        <table class="tabla-menu">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Precio (S/)</th>
+              <th>Cantidad</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for item in items %}
+            <tr>
+              <td class="product-name">{{ item.name }}</td>
+              <td>S/ {{ "%.2f"|format(item.price) }}</td>
+              <td colspan="2">
+                <form method="post" class="form-inline">
+                  <input type="hidden" name="item_id" value="{{ item.id }}">
+                  <input type="number" name="qty" value="1" min="1" class="qty-input">
+                  <button type="submit" class="btn-primary">Agregar</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endfor %}
+  </section>
+
+  <!-- CARRITO -->
+  <section class="carrito">
+    <div class="card card-carrito">
+      <h2 class="section-title">🧺 Pedido actual</h2>
+
+      {% if cart_items %}
+        <table class="tabla-menu">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cant.</th>
+              <th>Precio</th>
+              <th>Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for item in cart_items %}
+            <tr>
+              <td>{{ item.name }}</td>
+              <td>{{ item.qty }}</td>
+              <td>S/ {{ "%.2f"|format(item.price) }}</td>
+              <td>S/ {{ "%.2f"|format(item.subtotal) }}</td>
+              <td><a class="link-delete" href="{{ url_for('eliminar_item', item_id=item.id) }}">✕</a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+
+        <p class="total">Total: <strong>S/ {{ "%.2f"|format(total) }}</strong></p>
+
+        <form method="post" action="{{ url_for('confirmar_pedido') }}" class="form-pedido">
+          <label>Mesa / Cliente:</label>
+          <input type="text" name="mesa" placeholder="Mesa 1, Delivery, etc.">
+
+          <div class="pedido-actions">
+            <button type="submit" class="btn-primary full">💾 Guardar pedido</button>
+            <a href="{{ url_for('vaciar_carrito') }}" class="btn-secondary">🗑 Vaciar</a>
+          </div>
+        </form>
+
+      {% else %}
+        <p class="empty-text">No hay productos en el pedido.</p>
+      {% endif %}
+    </div>
+  </section>
+
+</div>
+
+{% endblock %}

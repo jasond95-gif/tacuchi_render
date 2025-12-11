@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="ticket-wrapper">
+  <div class="ticket card">
+    <h2 class="ticket-title">TACUCHI</h2>
+    <p class="ticket-subtitle">Ticket de pedido</p>
+
+    <div class="ticket-info">
+      <p><strong>Fecha/Hora:</strong> {{ fecha_hora }}</p>
+      <p><strong>Mesa / Cliente:</strong> {{ mesa if mesa else "N/A" }}</p>
+    </div>
+
+    <table class="ticket-table">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Cant.</th>
+          <th>Precio</th>
+          <th>Subt.</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart_items %}
+        <tr>
+          <td>{{ item.name }}</td>
+          <td>{{ item.qty }}</td>
+          <td>S/ {{ "%.2f"|format(item.price) }}</td>
+          <td>S/ {{ "%.2f"|format(item.subtotal) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <p class="ticket-total">
+      Total: <strong>S/ {{ "%.2f"|format(total) }}</strong>
+    </p>
+
+    <p class="ticket-note">
+      Gracias por su preferencia.
+    </p>
+
+    <div class="ticket-actions no-print">
+      <button onclick="window.print()" class="btn-primary full">
+        🖨 Imprimir ticket
+      </button>
+      <a href="{{ url_for('index') }}" class="btn-secondary">
+        ⬅ Nuevo pedido
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
